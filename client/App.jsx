@@ -3,7 +3,9 @@ import React, {Component} from 'react'
 
 class App extends Component {
   render() {
-    <hr/>
+    return (
+      <hr/>
+    )
   }
 }
 
