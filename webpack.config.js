@@ -9,7 +9,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(jsx|js)$/,
         use: {
           loader: 'babel-loader',
           options: {
@@ -18,5 +18,8 @@ module.exports = {
         }
       }
     ]
+  },
+  resolve: {
+    extensions: [ '.wasm', '.json', '.js', '.jsx' ]
   }
 }

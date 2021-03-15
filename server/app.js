@@ -8,7 +8,7 @@ const axios = require('axios')
 
 app.use(express.static(path.join(__dirname, './public')))
 
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './public/index.html'))
 })
 
@@ -41,7 +41,10 @@ app.get('/auth_success', async (req, res, next) => {
 
 app.get('/authorize', async (req, res, next) => {
   /*TO-DO: add access scopes */
-  res.redirect(`https://accounts.spotify.com/authorize?client_id=${process.env.SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${process.env.REDIRECT_URI}`)
+  const scopes = qs.stringify({
+    scope: 'user-read-recently-played user-top-read playlist-modify-public'
+  })
+  res.redirect(`https://accounts.spotify.com/authorize?client_id=${process.env.SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${process.env.REDIRECT_URI}&${scopes}`)
 })
 
 const PORT = 8082;
