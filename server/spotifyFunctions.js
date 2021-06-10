@@ -25,6 +25,8 @@ const getAccessAndRefreshTokens = async (accessCode) => {
 
   } catch (err) {
     console.log('Failed to fetch tokens:', err)
+    const { response: { data: errorMessage } } = err;
+    throw new Error(errorMessage.error_description)
   }
 };
 

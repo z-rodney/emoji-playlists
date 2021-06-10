@@ -1,36 +1,45 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import 'regenerator-runtime/runtime'
 import axios from 'axios'
 import qs from 'qs'
 import {useInput} from './customHooks'
 
 /*TO DO:
-if code, redirect to playlist creation screen
-if error, send to error need to connect screen
+handle old access code error
 */
 const CreatePlaylist = () => {
-  const getSpotifyTokens = async (code) => {
-    const authResponse = await axios.post('/auth_success', { code });
-    return authResponse.data;
-  }
-
-  if (window.location.search) {
-    const encodedURL = window.location.search.split('?')[1]
-    const { code, error }  = qs.parse(encodedURL)
-    console.log(code)
-    const authResponse = getSpotifyTokens(code);
-    console.log(authResponse.data)
-  }
-
-
   const [emojiPlaylistTitle, setEmojis] = useInput('');
+  const [spotifyAccessCode, setAccessCode] = useState('');
+  const [spotifyAccessError, setAccessError] = useState('');
 
-  const handleSubmit = (ev) => {
+  useEffect(() => {
+    if (window.location.search) {
+      const encodedURL = window.location.search.split('?')[1]
+      const { code, error } = qs.parse(encodedURL)
+      setAccessCode(code);
+      if (error) {
+        setAccessError(error);
+      }
+      console.log('access code:', spotifyAccessError)
+    }
+  }, [spotifyAccessCode, spotifyAccessError])
+
+  const handleSubmit = async (ev) => {
     ev.preventDefault();
-    console.log('title entered:', emojiPlaylistTitle)
+    const response = await axios.post('/playlist', {
+      spotifyAccessCode,
+      emojiPlaylistTitle
+    })
+    console.log(response.data)
   }
 
-  return (
+  return spotifyAccessError ?
+    <div>
+      <h2>Something went wrong :(</h2>
+      <p>We need access to your spotify account in order to create a playlist. Something went wrong and we could not get the access needed.
+      </p>
+    </div>
+    :
     <div>
       <h2>Create a Playlist</h2>
       <form onSubmit={handleSubmit}>
@@ -45,7 +54,6 @@ const CreatePlaylist = () => {
         <button type="submit">Create Playlist</button>
       </form>
     </div>
-  )
 }
 
 export default CreatePlaylist
