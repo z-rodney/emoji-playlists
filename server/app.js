@@ -3,7 +3,6 @@ require('dotenv').config()
 const express = require('express');
 const qs = require('qs')
 const path = require('path')
-const axios = require('axios')
 const app = express()
 const { getAccessAndRefreshTokens } = require('./spotifyFunctions')
 
@@ -26,12 +25,12 @@ app.post('/playlist', async (req, res, next) => {
   try {
     const { spotifyAccessCode, emojiPlaylistTitle } = req.body;
     const { refreshToken, accessToken } = await getAccessAndRefreshTokens(spotifyAccessCode);
-    console.log('received request, heres what i have:', accessToken, refreshToken, emojiPlaylistTitle)
-/*     if (errorMessage) {
-      console.log('received error', errorMessage)
-    } */
+    /*TO-DO: create playlist from bpm function,
+    pass emoji title and accesstoken into function */
+    console.log('received request, heres what i have:', accessToken, refreshToken, emojiPlaylistTitle);
     res.send('Ok')
   } catch (err) {
+    /*TO-DO: move custom error logging to custom error handler */
     console.log(err);
     if (err.message === 'Authorization code expired') {
       return res.send('expired')
