@@ -7,14 +7,17 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start-dev": "nodemon server/app.js --ignore /client --ignore public/ & npm run build-dev",
     "start": "node server/app.js",
-    "build-dev": "webpack --watch --mode development"
+    "build-dev": "webpack --watch --mode development",
+    "seed": "node server/seedFromCSV.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "csv-parser": "^3.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "iconv-lite": "^0.6.3",
     "qs": "^6.9.6"
   },
   "devDependencies": {
